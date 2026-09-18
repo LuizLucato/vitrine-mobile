@@ -1,5 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { useColorScheme } from "nativewind";
+import { Ionicons } from "@expo/vector-icons";
 
 interface CabecalhoProps {
   titulo: string;
@@ -27,9 +28,11 @@ export function Cabecalho({ titulo, favoritos }: CabecalhoProps) {
         accessibilityLabel="Alternar tema claro e escuro"
         className="min-w-[44px] min-h-[44px] items-center justify-center active:opacity-60"
       >
-        <Text className="text-[20px]">
-          {colorScheme === "dark" ? " " : " "}
-        </Text>
+        <Ionicons
+          name={colorScheme === "dark" ? "sunny-outline" : "moon-outline"}
+          size={22}
+          color={colorScheme === "dark" ? "#61DAFB" : "#0369A1"}
+        />
       </Pressable>
     </View>
   );

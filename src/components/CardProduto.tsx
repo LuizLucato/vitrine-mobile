@@ -45,7 +45,7 @@ export function CardProduto({
         className="min-w-[44px] min-h-[44px] items-center justify-center active:opacity-60"
       >
         <Text className="text-sky-600 dark:text-destaque text-2xl">
-          {favorito ? " " : " "}
+          {favorito ? "★" : "☆"}
         </Text>
       </Pressable>
     </View>
