@@ -1,7 +1,6 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
-
 import { BotaoTema } from "@/components/BotaoTema";
 import { CORES_NAVEGACAO } from "@/constants/tema";
 
@@ -24,6 +23,11 @@ export default function LayoutAbas() {
         },
         headerTintColor: cores.texto,
         headerRight: () => <BotaoTema />,
+
+        // NOVO: fundo das telas das abas, nos dois temas
+        sceneStyle: {
+          backgroundColor: cores.fundo,
+        },
       }}
     >
       <Tabs.Screen
