@@ -1,3 +1,8 @@
+/**
+ * Gera uma lista de produtos para simular um catálogo maior.
+ * Reutiliza os produtos de exemplo, criando IDs e títulos únicos.
+ */
+
 import { PRODUTOS } from "@/constants/produtos";
 import { Produto } from "@/types/produto";
 

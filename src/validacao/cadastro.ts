@@ -1,3 +1,8 @@
+/**
+ * Define as regras de validação do formulário de cadastro.
+ * Utiliza Yup para validar os campos e gerar seu tipo TypeScript.
+ */
+
 import * as yup from "yup";
 
 export const esquemaCadastro = yup.object({
@@ -19,7 +24,9 @@ export const esquemaCadastro = yup.object({
   confirmacao: yup
     .string()
     .required("Repita a senha")
+    // Compara a confirmação com o valor informado no campo senha.
     .oneOf([yup.ref("senha")], "As senhas não conferem"),
 });
 
+// Infere automaticamente o tipo dos dados a partir do esquema.
 export type DadosCadastro = yup.InferType<typeof esquemaCadastro>;

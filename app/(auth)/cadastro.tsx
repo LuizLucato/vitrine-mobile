@@ -1,3 +1,17 @@
+/**
+ * Tela responsável pelo formulário de cadastro de usuários.
+ *
+ * Utiliza React Hook Form para gerenciar os campos e o Yup para validar
+ * os dados informados. O cadastro é simulado, sem comunicação com uma API.
+ *
+ * Funcionalidades:
+ * - Validar nome, e-mail, senha e confirmação de senha.
+ * - Exibir mensagens de erro nos campos.
+ * - Simular o envio dos dados de cadastro.
+ * - Impedir múltiplos envios enquanto o formulário é processado.
+ * - Redirecionar o usuário para o login após o cadastro simulado.
+ */
+
 import {
   KeyboardAvoidingView,
   Platform,
@@ -12,8 +26,19 @@ import { CampoTexto } from "@/components/CampoTexto";
 import { DadosCadastro, esquemaCadastro } from "@/validacao/cadastro";
 
 export default function CadastroScreen() {
+  // Permite navegar entre as telas utilizando o Expo Router.
   const router = useRouter();
 
+  /**
+   * Configura o formulário utilizando React Hook Form.
+   *
+   * control: controla os campos conectados ao formulário.
+   * handleSubmit: valida os dados antes de executar o envio.
+   * setError: permite definir erros manualmente em campos específicos.
+   * reset: restaura os valores iniciais do formulário.
+   * errors: armazena os erros de validação.
+   * isSubmitting: indica se o formulário está sendo enviado.
+   */
   const {
     control,
     handleSubmit,
@@ -21,23 +46,33 @@ export default function CadastroScreen() {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<DadosCadastro>({
+    // Define os valores iniciais dos campos.
     defaultValues: {
       nome: "",
       email: "",
       senha: "",
       confirmacao: "",
     },
+
+    // Integra o esquema de validação do Yup ao React Hook Form.
     resolver: yupResolver(esquemaCadastro),
+
+    // Valida inicialmente ao sair do campo e revalida ao alterar seu valor.
     mode: "onBlur",
     reValidateMode: "onChange",
   });
 
+  /**
+   * Executada após o formulário passar pelas validações do Yup.
+   * Simula o cadastro e trata um possível erro no e-mail informado.
+   */
   async function aoEnviar(dados: DadosCadastro) {
-    // simulação: a API de exemplo não tem cadastro de verdade
+    // Simula uma requisição assíncrona com duração de 1,2 segundo.
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
+    // Simula um erro caso o e-mail já esteja cadastrado.
     if (dados.email === "emily.johnson@x.dummyjson.com") {
-      // erro do servidor que pertence a um campo específico
+      // Associa a mensagem de erro diretamente ao campo de e-mail.
       setError("email", {
         message: "Este e-mail já tem cadastro.",
       });
@@ -46,11 +81,14 @@ export default function CadastroScreen() {
     }
 
     console.log("cadastrado:", dados.nome, dados.email);
+
+    // Limpa os campos e substitui a tela atual pela tela de login.
     reset();
     router.replace("/login");
   }
 
   return (
+    // Ajusta o comportamento da tela quando o teclado aparece no iOS.
     <KeyboardAvoidingView
       className="flex-1 bg-white dark:bg-fundo"
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -67,6 +105,7 @@ export default function CadastroScreen() {
           Leva menos de um minuto.
         </Text>
 
+        {/* Componente reutilizável conectado ao React Hook Form. */}
         <CampoTexto
           control={control}
           name="nome"
@@ -105,6 +144,7 @@ export default function CadastroScreen() {
           secureTextEntry
         />
 
+        {/* Envia o formulário somente após a validação dos campos. */}
         <Pressable
           onPress={handleSubmit(aoEnviar)}
           disabled={isSubmitting}
@@ -116,6 +156,7 @@ export default function CadastroScreen() {
               : "bg-sky-600 dark:bg-destaque active:opacity-80"
           }`}
         >
+          {/* Altera o texto e o estilo enquanto o cadastro é processado. */}
           <Text
             className={`font-bold ${
               isSubmitting
@@ -127,6 +168,7 @@ export default function CadastroScreen() {
           </Text>
         </Pressable>
 
+        {/* Navega para o login substituindo a tela atual no histórico. */}
         <Link
           href="/login"
           replace

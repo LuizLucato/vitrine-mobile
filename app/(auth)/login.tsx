@@ -1,3 +1,18 @@
+/**
+ * Tela responsável pela autenticação simulada de usuários.
+ *
+ * Utiliza React Hook Form para controlar os campos e Yup para validar
+ * os dados antes do envio. A autenticação é simulada com credenciais fixas.
+ *
+ * Funcionalidades:
+ * - Validar usuário e senha.
+ * - Exibir erros de validação e autenticação.
+ * - Simular uma requisição assíncrona de login.
+ * - Desabilitar o botão durante o envio.
+ * - Redirecionar para o catálogo após o login bem-sucedido.
+ * - Permitir navegar para a tela de cadastro.
+ */
+
 import {
   KeyboardAvoidingView,
   Platform,
@@ -13,8 +28,18 @@ import { CampoTexto } from "@/components/CampoTexto";
 import { DadosLogin, esquemaLogin } from "@/validacao/login";
 
 export default function LoginScreen() {
+  // Permite realizar navegações programaticamente.
   const router = useRouter();
 
+  /**
+   * Inicializa o formulário de login.
+   *
+   * O tipo DadosLogin garante a tipagem dos campos.
+   * O yupResolver utiliza as regras definidas no esquemaLogin.
+   *
+   * errors: contém os erros encontrados.
+   * isSubmitting: indica se o formulário está sendo processado.
+   */
   const {
     control,
     handleSubmit,
@@ -25,17 +50,25 @@ export default function LoginScreen() {
       usuario: "",
       senha: "",
     },
+
     resolver: yupResolver(esquemaLogin),
+
+    // Valida ao sair do campo e revalida durante as alterações.
     mode: "onBlur",
     reValidateMode: "onChange",
   });
 
+  /**
+   * Executa a autenticação simulada após validar os campos.
+   * Compara os dados informados com credenciais predefinidas.
+   */
   async function aoEnviar(dados: DadosLogin) {
-    // simulação: no encontro 9, isto vira a chamada à API
+    // Simula o tempo de resposta de uma API de autenticação.
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
+    // Verifica se o usuário ou a senha são diferentes dos esperados.
     if (dados.usuario !== "emilys" || dados.senha !== "emilyspass") {
-      // mensagem genérica: não revele qual dos dois estava errado
+      // Define um erro geral sem informar qual credencial está incorreta.
       setError("root", {
         message: "Usuário ou senha incorretos.",
       });
@@ -44,10 +77,13 @@ export default function LoginScreen() {
     }
 
     console.log("autenticado:", dados.usuario);
+
+    // Substitui a tela de login pela tela principal do catálogo.
     router.replace("/");
   }
 
   return (
+    // Evita que o teclado sobreponha o formulário no iOS.
     <KeyboardAvoidingView
       className="flex-1 bg-white dark:bg-fundo"
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -64,6 +100,7 @@ export default function LoginScreen() {
           Entre para ver seus favoritos.
         </Text>
 
+        {/* Exibe uma mensagem geral quando a autenticação falha. */}
         {errors.root ? (
           <View className="bg-red-50 dark:bg-alerta/20 border border-red-600 dark:border-alerta rounded-lg p-3 mb-4">
             <Text className="text-red-700 dark:text-alerta text-sm">
@@ -72,6 +109,7 @@ export default function LoginScreen() {
           </View>
         ) : null}
 
+        {/* Campos reutilizáveis controlados pelo React Hook Form. */}
         <CampoTexto
           control={control}
           name="usuario"
@@ -93,6 +131,7 @@ export default function LoginScreen() {
           autoComplete="password"
         />
 
+        {/* handleSubmit valida os dados antes de chamar aoEnviar. */}
         <Pressable
           onPress={handleSubmit(aoEnviar)}
           disabled={isSubmitting}
@@ -104,6 +143,7 @@ export default function LoginScreen() {
               : "bg-sky-600 dark:bg-destaque active:opacity-80"
           }`}
         >
+          {/* Exibe o estado de carregamento durante a autenticação. */}
           <Text
             className={`font-bold ${
               isSubmitting
@@ -115,6 +155,7 @@ export default function LoginScreen() {
           </Text>
         </Pressable>
 
+        {/* Permite acessar o cadastro sem empilhar outra tela no histórico. */}
         <Link
           href="/cadastro"
           replace

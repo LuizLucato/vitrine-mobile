@@ -1,7 +1,34 @@
+/**
+ * Arquivo responsável por armazenar os produtos de exemplo do aplicativo.
+ *
+ * Define uma lista fixa de produtos utilizada para simular um catálogo,
+ * sem precisar realizar requisições a uma API.
+ *
+ * Funcionalidades:
+ * - Armazenar os dados dos produtos utilizados nos testes.
+ * - Garantir que os produtos sigam a estrutura definida pelo tipo Produto.
+ * - Centralizar o endereço utilizado para carregar as imagens.
+ *
+ * Conceitos utilizados:
+ * - Array de objetos: armazena vários produtos em uma única estrutura.
+ * - Tipagem (Produto[]): garante que os itens sigam o tipo Produto.
+ * - const: declara referências que não podem ser reatribuídas.
+ * - Template literals: permitem inserir variáveis dentro de strings.
+ */
+
 import { Produto } from "@/types/produto";
 
+// Endereço base utilizado para montar as URLs das imagens dos produtos.
 const CDN = "https://cdn.dummyjson.com/product-images";
 
+/**
+ * Lista de produtos utilizada como base para os testes.
+ *
+ * Produto[] indica que o array deve conter objetos compatíveis
+ * com o tipo Produto, definido em src/types/produto.
+ *
+ * export permite importar essa constante em outros arquivos.
+ */
 export const PRODUTOS: Produto[] = [
   {
     id: 1,
