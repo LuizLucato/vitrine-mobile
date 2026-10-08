@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "nativewind";
-
 import { CORES_NAVEGACAO } from "@/constants/tema";
 
 export default function LayoutRaiz() {
@@ -36,6 +35,9 @@ export default function LayoutRaiz() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
+        {/* NOVO: o grupo de autenticação, sem o cabeçalho da pilha */}
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
 
         <Stack.Screen
           name="produto/[id]"
